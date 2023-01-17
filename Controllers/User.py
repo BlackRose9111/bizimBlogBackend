@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.openapi.models import Header
+from starlette.requests import Request
 
 from Models.DTO import CreateUserDTO
 
@@ -9,8 +10,8 @@ async def test():
     return {"message": "Hello World"}
 
 @router.get("/")
-async def get_user(request):
-    token = request.headers.get("Authorization")
+async def get_user(request : Request):
+    token = request.headers.get("authorization")
 
     from Models.DTO import DTO
     from Authorization.Authorization import Authorization
