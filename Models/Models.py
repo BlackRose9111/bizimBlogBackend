@@ -157,7 +157,7 @@ class Blog(Model):
             query += key + "=%s AND "
             values.append(value)
         query = query[:-4]
-        blogs = dbinstance.fetch(query,values)
+        blogs = dbinstance.fetch(query,tuple(values))
         if blogs == None:
             return None
         return [Blog(**blog) for blog in blogs]

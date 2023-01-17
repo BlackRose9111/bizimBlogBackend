@@ -29,11 +29,12 @@ async def login(LoginDTO : LoginDto):
         raise HTTPException(status_code=401, detail="Incorrect password")
 
 
-@router.post("/register")
+@router.post("/register",status_code=200)
 async def register(RegisterDTO : CreateUserDTO):
     from Models.Models import User
+    print(RegisterDTO.email)
+    print(type(RegisterDTO))
     user = await User.find_where(email=RegisterDTO.email)
-
     if len(user) > 0:
         raise HTTPException(status_code=400, detail="Email already exists")
     newUser = User(email=RegisterDTO.email,password=RegisterDTO.password,name=RegisterDTO.name,surname=RegisterDTO.surname)

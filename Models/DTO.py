@@ -41,6 +41,9 @@ class CreateUserDTO(DTO):
     password : str = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        for key,value in kwargs.items():
+            setattr(self,key,value)
+
 class CreateBlogDTO(DTO):
     id : int = None
     title : str = None

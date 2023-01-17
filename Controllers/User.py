@@ -13,7 +13,7 @@ async def test():
 
 @router.get("/")
 async def get_user(request : Request):
-    token = request.headers.get("Authorization")
+    token = request.headers.get("authorization")
 
     from Models.DTO import DTO
     from Authorization.Authorization import Authorization
