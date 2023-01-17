@@ -20,7 +20,7 @@ async def get_user(request : Request):
         raise HTTPException(status_code=404, detail="User not found")
 
     userdto = DTO(id=id,name=user.name,surname=user.surname,email=user.email)
-    return userdto.to_json()
+    return userdto
 
 @router.post("/")
 async def create_user(userdto: CreateUserDTO):
