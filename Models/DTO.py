@@ -54,3 +54,10 @@ class LoginDto(DTO):
     password : str = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+class UserInfoDTO(DTO):
+    name : str = None
+    surname : str = None
+    email : str = None
+    superadmin : bool = False
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
