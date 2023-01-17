@@ -34,3 +34,10 @@ class CreateUserDTO(DTO):
     password : str = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+class CreateBlogDTO(DTO):
+    id : int = None
+    title : str = None
+    content : str = None
+    author : int = None
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

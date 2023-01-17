@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from Data.DbContext import DbConnection
 import bcrypt
 
@@ -93,6 +95,63 @@ class User(Model):
             return None
         return [User(**user) for user in users]
 
+class Blog(Model):
+    author : User = None
+    title : str = None
+    content : str = None
+    created : datetime = None
+    updated : datetime = None
+    def __init__(self,**kwargs):
+        super().__init__()
+        for key,value in kwargs.items():
+            setattr(self,key,value)
+    def create(self):
+        self.dbinstance.execute("INSERT INTO blog (author,title,content,created,updated) VALUES (%s,%s,%s,%s,%s)",(self.author.id,self.title,self.content,self.created,self.updated))
+        self.id = self.dbinstance.last_id()
+        print("Blog created with id: ",self.id)
+        return self.id
 
+    def update(self):
+        if self.id == None:
+            return False
+        self.dbinstance.execute("UPDATE blog SET author=%s,title=%s,content=%s,created=%s,updated=%s WHERE id=%s",(self.author.id,self.title,self.content,self.created,self.updated,self.id))
+        print("Blog updated with id: ",self.id)
+        return True
 
+    def delete(self):
+        if self.id == None:
+            return False
+        self.dbinstance.execute("DELETE FROM blog WHERE id=%s",(self.id,))
+        print("Blog deleted with id: ",self.id)
+        return True
+
+    @staticmethod
+    def get(id):
+        dbinstance = DbConnection.get_instance()
+        try:
+            blog = dbinstance.fetch("SELECT * FROM blog WHERE id=%s",(id,))[0]
+        except:
+            return None
+        if blog == None:
+            return None
+        blog["author"] = User.get(blog["author"])
+        return Blog(**blog)
+    @staticmethod
+    async def get_all():
+        dbinstance = DbConnection.get_instance()
+        blogs = dbinstance.fetch("SELECT * FROM blog WHERE 1")
+        if blogs == None:
+            return None
+        return [Blog(**blog) for blog in blogs]
+    @staticmethod
+    async def find_where(**kwargs):
+        dbinstance = DbConnection.get_instance()
+        query = "SELECT * FROM blog WHERE "
+        for key,value in kwargs.items():
+            query += key + "=%s AND "
+        query = query[:-4]
+        blogs = dbinstance.fetch(query,kwargs.values())
+        if blogs == None:
+            return None
+        return [Blog(**blog) for blog in blogs]
 

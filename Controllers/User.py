@@ -6,13 +6,12 @@ router = APIRouter()
 async def test():
     return {"message": "Hello World"}
 
-@router.get("/")
-async def get_user():
+@router.get("/{id}")
+async def get_user(id:int):
 
     from Models.Models import User
     from Models.DTO import DTO
-    from Authorization import Authorization
-    user = Authorization.Authorization.get_instance().get_user(id)
+    user = User.get(id)
     if user == None:
         return {"message":"User not found"}
 
