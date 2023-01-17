@@ -32,14 +32,8 @@ async def login(LoginDTO : LoginDto):
 @router.post("/register")
 async def register(RegisterDTO : CreateUserDTO):
     from Models.Models import User
-    try:
-        print(RegisterDTO)
-        user = await User.find_where(email=RegisterDTO.email)
-        user = user[0]
-    except:
-        raise HTTPException(status_code=404, detail="User not found")
+    user = User.find_where(email=RegisterDTO.email)
 
-    print(RegisterDTO)
     if len(user) > 0:
         raise HTTPException(status_code=400, detail="Email already exists")
     newUser = User(email=RegisterDTO.email,password=RegisterDTO.password,name=RegisterDTO.name,surname=RegisterDTO.surname)
