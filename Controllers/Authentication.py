@@ -9,10 +9,10 @@ router = APIRouter()
 async def hello():
     return {"message":"You found the authentication controller"}
 @router.post("/login")
-async def login(CreatedUserDTO):
+async def login(LoginDTO):
     from Models.Models import User
     from Authorization.Authorization import Authorization
-    user = User.find_where(email=CreatedUserDTO.email)
+    user = User.find_where(email=LoginDTO.email)
     if user == None:
         return
     if user.check_password(user.password):
@@ -24,7 +24,7 @@ async def login(CreatedUserDTO):
 async def register(RegisterDTO : CreateUserDTO):
     from Models.Models import User
     user = User.find_where(email=RegisterDTO.email)
-    if user != None:
+    if len(user) > 0:
         return {"message":"User already exists"}
     user = User(**RegisterDTO.__dict__)
     user.set_password(user.password)
