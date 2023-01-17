@@ -87,10 +87,12 @@ class User(Model):
     async def find_where(**kwargs):
         dbinstance = DbConnection.get_instance()
         query = "SELECT * FROM user WHERE "
+        values = []
         for key,value in kwargs.items():
             query += key + "=%s AND "
+            values.append(value)
         query = query[:-4]
-        users = dbinstance.fetch(query,kwargs.values())
+        users = dbinstance.fetch(query,values)
         if users == None:
             return None
         return [User(**user) for user in users]
@@ -147,10 +149,12 @@ class Blog(Model):
     async def find_where(**kwargs):
         dbinstance = DbConnection.get_instance()
         query = "SELECT * FROM blog WHERE "
+        values = []
         for key,value in kwargs.items():
             query += key + "=%s AND "
+            values.append(value)
         query = query[:-4]
-        blogs = dbinstance.fetch(query,kwargs.values())
+        blogs = dbinstance.fetch(query,values)
         if blogs == None:
             return None
         return [Blog(**blog) for blog in blogs]
