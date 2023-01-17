@@ -1,4 +1,6 @@
 from fastapi import APIRouter
+from fastapi.openapi.models import Header
+
 from Models.DTO import CreateUserDTO
 
 router = APIRouter()
@@ -6,16 +8,15 @@ router = APIRouter()
 async def test():
     return {"message": "Hello World"}
 
-@router.get("/{id}")
-async def get_user(id:int):
+@router.get("/")
+async def get_user(token : str = Header(default=None,description="Authorization token")):
 
     from Models.Models import User
     from Models.DTO import DTO
-    user = User.get(id)
+    from Authorization.Authorization import Authorization
+    user = Authorization.get_instance().get_user(token)
     if user == None:
         return {"message":"User not found"}
-
-
 
     userdto = DTO(id=id,name=user.name,surname=user.surname,email=user.email)
     return userdto.to_json()

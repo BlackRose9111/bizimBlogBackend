@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.params import Header
 
 from Models.DTO import CreateBlogDTO
 
@@ -20,7 +21,7 @@ async def get_blog(id:int):
     return {"message":"Blog found","blog":blogdto}
 
 @router.post("/")
-async def create_blog(blogdto : CreateBlogDTO,token):
+async def create_blog(blogdto : CreateBlogDTO,token : str = Header(default=None,description="Authorization token")):
     from Models.Models import Blog
     from Models.DTO import DTO
     from Authorization.Authorization import Authorization
