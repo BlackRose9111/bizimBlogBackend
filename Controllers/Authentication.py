@@ -29,7 +29,7 @@ async def login(LoginDTO : LoginDto):
         raise HTTPException(status_code=401, detail="Incorrect password")
 
 
-@router.post("/register",status_code=200)
+@router.post("/register")
 async def register(RegisterDTO : CreateUserDTO):
     from Models.Models import User
     print(RegisterDTO)
