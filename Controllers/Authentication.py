@@ -30,5 +30,5 @@ async def register(RegisterDTO : CreateUserDTO):
     newUser = User(email=RegisterDTO.email,password=RegisterDTO.password,name=RegisterDTO.name,surname=RegisterDTO.surname)
     newUser.set_password(RegisterDTO.password)
     newUser.create()
-    print(user.id+"Created")
+    print(newUser.id + " Created User")
     return {"message":"User created"}
