@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.openapi.models import Header
 
 from Models.DTO import CreateUserDTO
@@ -11,12 +11,12 @@ async def test():
 @router.get("/")
 async def get_user(token : str = Header(default=None,description="Authorization token")):
 
-    from Models.Models import User
+    print(token)
     from Models.DTO import DTO
     from Authorization.Authorization import Authorization
     user = Authorization.get_instance().get_user(token)
     if user == None:
-        return {"message":"User not found"}
+        raise HTTPException(status_code=404, detail="User not found")
 
     userdto = DTO(id=id,name=user.name,surname=user.surname,email=user.email)
     return userdto.to_json()
