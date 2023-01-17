@@ -1,5 +1,4 @@
 from fastapi import APIRouter, HTTPException
-from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from Models.DTO import CreateUserDTO,LoginDto
@@ -31,16 +30,19 @@ async def login(LoginDTO : LoginDto):
 
 
 @router.post("/register")
-async def register(request : Request):
+async def register(RegisterDTO : CreateUserDTO):
     from Models.Models import User
-    result = await request.json()
-    RegisterDTO = CreateUserDTO(email=result["email"],name=result["name"],surname=result["surname"],password=result["password"])
+    try:
+        user = await User.find_where(email=RegisterDTO.email)
+        user = user[0]
+    except:
+        raise HTTPException(status_code=404, detail="User not found")
+
     print(RegisterDTO)
-    user = await User.find_where(email=RegisterDTO.email)
     if len(user) > 0:
         raise HTTPException(status_code=400, detail="Email already exists")
-    newUser = User(email=result["email"],name=result["name"],surname=result["surname"])
-    newUser.set_password(result["password"])
+    newUser = User(email=RegisterDTO.email,password=RegisterDTO.password,name=RegisterDTO.name,surname=RegisterDTO.surname)
+    newUser.set_password(RegisterDTO.password)
     newUser.create()
     print(f"{newUser.email} created")
     return {"message":"User created"}
