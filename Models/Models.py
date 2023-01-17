@@ -35,7 +35,7 @@ class User(Model):
     surname : str = None
     email : str = None
     password : str = None
-    isauthor : bool = False
+    superadmin : bool = False
     def __init__(self,**kwargs):
         super().__init__()
         for key,value in kwargs.items():
