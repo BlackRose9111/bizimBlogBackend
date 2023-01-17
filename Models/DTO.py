@@ -9,6 +9,13 @@ class DTO(pydantic.BaseModel):
     def __str__(self):
         return str(self.__dict__)
 
+    def __dict__(self):
+        dict = {}
+        for key in self.__annotations__:
+            dict[key] = getattr(self,key)
+        return dict
+
+
     def __repr__(self):
         return str(self.__dict__)
 
