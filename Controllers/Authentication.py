@@ -32,7 +32,7 @@ async def login(LoginDTO : LoginDto):
 @router.post("/register",status_code=200)
 async def register(RegisterDTO : CreateUserDTO):
     from Models.Models import User
-
+    print(RegisterDTO.email)
     user = await User.find_where(email=RegisterDTO.email)
     if len(user) > 0:
         raise HTTPException(status_code=400, detail="Email already exists")
