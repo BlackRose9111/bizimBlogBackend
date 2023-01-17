@@ -23,12 +23,13 @@ async def login(LoginDTO):
 
 
 @router.post("/register",status_code=200)
-async def register(RegisterDTO : CreateUserDTO,response: Response):
+async def register(RegisterDTO : CreateUserDTO, response: Response):
     from Models.Models import User
 
     user = await User.find_where(email=RegisterDTO.email)
     if len(user) > 0:
         response.status_code = 400
+        response.reason_phrase = "User already exists"
         return {"message":"User already exists"}
     newUser = User(email=RegisterDTO.email,password=RegisterDTO.password,name=RegisterDTO.name,surname=RegisterDTO.surname)
     newUser.set_password(RegisterDTO.password)
