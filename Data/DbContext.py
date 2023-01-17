@@ -15,6 +15,7 @@ class DbConnection:
         self.connection.close()
         self.keep_alive_thread.join()
         print("Database connection closed")
+        global instance
         instance = None
 
     def execute(self, query,params=None):
