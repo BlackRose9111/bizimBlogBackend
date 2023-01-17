@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.openapi.models import Response
+
 from Models.DTO import CreateUserDTO
 
 
@@ -20,13 +22,14 @@ async def login(LoginDTO):
     return {"message":"Login failed"}
 
 
-@router.post("/register")
-async def register(RegisterDTO : CreateUserDTO):
+@router.post("/register",status_code=200)
+async def register(RegisterDTO : CreateUserDTO,response: Response):
     from Models.Models import User
 
     user = await User.find_where(email=RegisterDTO.email)
     if len(user) > 0:
-        return HTTPException(status_code=400, detail="User already exists")
+        response.status_code = 400
+        return {"message":"User already exists"}
     newUser = User(email=RegisterDTO.email,password=RegisterDTO.password,name=RegisterDTO.name,surname=RegisterDTO.surname)
     newUser.set_password(RegisterDTO.password)
     newUser.create()
