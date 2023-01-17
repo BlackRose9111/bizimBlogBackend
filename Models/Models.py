@@ -52,7 +52,10 @@ class User(Model):
     def set_password(self,password):
         self.password = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt()).decode('utf-8')
     def check_password(self,password):
-        return bcrypt.checkpw(password.encode("utf-8"),self.password)
+        encoded_password = password.encode('utf-8')
+        encoded_hash = self.password.encode('utf-8')
+        print(f"{encoded_password} Encoded Hash {encoded_hash}")
+        return bcrypt.checkpw(password.encode("utf-8"),encoded_hash)
 
     def update(self):
         if self.id == None:
