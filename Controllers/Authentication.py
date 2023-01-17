@@ -3,6 +3,10 @@ from fastapi import APIRouter
 
 
 router = APIRouter()
+
+@router.get("/")
+async def hello():
+    return {"message":"You found the authentication controller"}
 @router.post("/login")
 async def login(LoginDTO):
     from Models.Models import User
