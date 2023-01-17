@@ -13,10 +13,14 @@ async def hello():
 async def login(LoginDTO : LoginDto):
     from Models.Models import User
     from Authorization.Authorization import Authorization
-    user = User.find_where(email=LoginDTO.email)
+    try:
+        user = await User.find_where(email=LoginDTO.email)
+        user = user[0]
+    except:
+        raise HTTPException(status_code=404, detail="User not found")
     if user == None:
         return
-    if await user.check_password(user.password):
+    if user.check_password(user.password):
         return {"message":"Login successful","token":Authorization.get_instance().generate_token(user)}
     raise HTTPException(status_code=401, detail="Incorrect email or password")
 
