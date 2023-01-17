@@ -18,7 +18,7 @@ async def login(LoginDTO):
         return
     if user.check_password(user.password):
         return {"message":"Login successful","token":Authorization.get_instance().generate_token(user)}
-    return {"message":"Login failed"}
+    raise HTTPException(status_code=401, detail="Incorrect email or password")
 
 
 @router.post("/register",status_code=200)
