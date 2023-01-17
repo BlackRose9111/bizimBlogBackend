@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from Models.DTO import CreateUserDTO
+from Models.DTO import CreateUserDTO,LoginDto
 
 
 
@@ -10,7 +10,7 @@ router = APIRouter()
 async def hello():
     return {"message":"You found the authentication controller"}
 @router.post("/login")
-async def login(LoginDTO):
+async def login(LoginDTO : LoginDto):
     from Models.Models import User
     from Authorization.Authorization import Authorization
     user = User.find_where(email=LoginDTO.email)
