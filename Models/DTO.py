@@ -9,11 +9,6 @@ class DTO(pydantic.BaseModel):
     def __str__(self):
         return str(self.__dict__)
 
-    def __dict__(self):
-        dict = {}
-        for key in self.__annotations__:
-            dict[key] = getattr(self,key)
-        return dict
 
 
     def __repr__(self):
@@ -39,10 +34,7 @@ class CreateUserDTO(DTO):
     surname : str = None
     email : str = None
     password : str = None
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        for key,value in kwargs.items():
-            setattr(self,key,value)
+
 
 class CreateBlogDTO(DTO):
     id : int = None
