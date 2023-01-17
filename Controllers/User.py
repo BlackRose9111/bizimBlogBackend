@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.openapi.models import Header
 from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from Models.DTO import CreateUserDTO
 
@@ -19,8 +20,8 @@ async def get_user(request : Request):
     if user == None:
         raise HTTPException(status_code=404, detail="User not found")
 
-    userdto = DTO(id=id,name=user.name,surname=user.surname,email=user.email)
-    return userdto
+    userdto = DTO(id=user.id,name=user.name,surname=user.surname,email=user.email)
+    return JSONResponse({"message":"User found","user":userdto},status_code=200)
 
 @router.post("/")
 async def create_user(userdto: CreateUserDTO):
