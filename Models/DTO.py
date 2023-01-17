@@ -41,3 +41,9 @@ class CreateBlogDTO(DTO):
     author : int = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+class LoginDto(DTO):
+    email : str = None
+    password : str = None
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
