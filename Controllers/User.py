@@ -20,7 +20,7 @@ async def get_user(request : Request):
     if user == None:
         raise HTTPException(status_code=404, detail="User not found")
 
-    userdto = CreateUserDTO(id=user.id,name=user.name,surname=user.surname,email=user.email)
+    userdto = DTO(id=user.id,name=user.name,surname=user.surname,email=user.email)
     print(userdto)
     return {"message":"User found","user":userdto}
 
