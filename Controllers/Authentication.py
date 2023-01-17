@@ -1,10 +1,13 @@
 from fastapi import APIRouter, HTTPException
+from starlette.responses import JSONResponse
 
 from Models.DTO import CreateUserDTO,LoginDto
 
 
 
 router = APIRouter()
+
+
 
 @router.get("/")
 async def hello():
@@ -21,7 +24,7 @@ async def login(LoginDTO : LoginDto):
     if user == None:
         return
     if user.check_password(LoginDTO.password):
-        return {"message":"Login successful","token":Authorization.get_instance().generate_token(user)}
+        return {"message":"Login successful","Authorization":Authorization.get_instance().generate_token(user)}
     else:
         raise HTTPException(status_code=401, detail="Incorrect password")
 
