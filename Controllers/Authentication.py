@@ -33,6 +33,7 @@ async def login(LoginDTO : LoginDto):
 async def register(RegisterDTO : CreateUserDTO):
     from Models.Models import User
     try:
+        print(RegisterDTO)
         user = await User.find_where(email=RegisterDTO.email)
         user = user[0]
     except:
