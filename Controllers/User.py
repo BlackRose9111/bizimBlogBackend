@@ -22,7 +22,7 @@ async def get_user(request : Request):
 
     userdto = CreateUserDTO(id=user.id,name=user.name,surname=user.surname,email=user.email)
     print(userdto)
-    return JSONResponse({"message":"User found","user":userdto},status_code=200)
+    return {"message":"User found","user":userdto}
 
 @router.post("/")
 async def create_user(userdto: CreateUserDTO):
