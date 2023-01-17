@@ -9,12 +9,12 @@ async def test():
     return {"message": "Hello World"}
 
 @router.get("/")
-async def get_user(token : str = Header(default=None,description="Authorization token")):
+async def get_user(Authorization : str = Header(keyword="Authorization",default=None,description="Authorization token")):
 
-    print(token)
+    print(Authorization)
     from Models.DTO import DTO
     from Authorization.Authorization import Authorization
-    user = Authorization.get_instance().get_user(token)
+    user = Authorization.get_instance().get_user(Authorization)
     if user == None:
         raise HTTPException(status_code=404, detail="User not found")
 
