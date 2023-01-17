@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from Models.DTO import CreateUserDTO,LoginDto
@@ -30,8 +31,10 @@ async def login(LoginDTO : LoginDto):
 
 
 @router.post("/register")
-async def register(RegisterDTO : CreateUserDTO):
+async def register(request : Request):
     from Models.Models import User
+    result = await request.json()
+    RegisterDTO = CreateUserDTO(**result)
     print(RegisterDTO)
     user = await User.find_where(email=RegisterDTO.email)
     if len(user) > 0:
