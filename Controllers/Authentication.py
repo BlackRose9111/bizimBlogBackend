@@ -34,13 +34,13 @@ async def login(LoginDTO : LoginDto):
 async def register(request : Request):
     from Models.Models import User
     result = await request.json()
-    RegisterDTO = CreateUserDTO(**result)
+    RegisterDTO = CreateUserDTO(email=result["email"],name=result["name"],surname=result["surname"],password=result["password"])
     print(RegisterDTO)
     user = await User.find_where(email=RegisterDTO.email)
     if len(user) > 0:
         raise HTTPException(status_code=400, detail="Email already exists")
-    newUser = User(email=RegisterDTO.email,password=RegisterDTO.password,name=RegisterDTO.name,surname=RegisterDTO.surname)
-    newUser.set_password(RegisterDTO.password)
+    newUser = User(email=result["email"],name=result["name"],surname=result["surname"])
+    newUser.set_password(result["password"])
     newUser.create()
     print(f"{newUser.email} created")
     return {"message":"User created"}
