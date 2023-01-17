@@ -16,7 +16,7 @@ async def login(LoginDTO : LoginDto):
     user = User.find_where(email=LoginDTO.email)
     if user == None:
         return
-    if user.check_password(user.password):
+    if await user.check_password(user.password):
         return {"message":"Login successful","token":Authorization.get_instance().generate_token(user)}
     raise HTTPException(status_code=401, detail="Incorrect email or password")
 
