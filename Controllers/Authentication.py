@@ -1,6 +1,9 @@
-from main import app
+from fastapi import APIRouter
 
-@app.post("/login")
+
+
+router = APIRouter()
+@router.post("/login")
 async def login(user):
     from Models.Models import User
     from Authorization.Authorization import Authorization
@@ -10,3 +13,5 @@ async def login(user):
     if user.check_password(user.password):
         return {"message":"Login successful","token":Authorization.get_instance().generate_token(user)}
     return {"message":"Login failed"}
+
+

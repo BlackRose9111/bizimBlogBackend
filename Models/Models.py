@@ -1,4 +1,4 @@
-from Models.DbContext import DbConnection
+from Data.DbContext import DbConnection
 import bcrypt
 
 class Model():
