@@ -1,12 +1,15 @@
 from datetime import datetime
 
+import pydantic
+
 from Data.DbContext import DbConnection
 import bcrypt
 
-class Model():
+class Model(pydantic.BaseModel):
     id : int = None
     dbinstance = None
     def __init__(self):
+        super().__init__()
         self.dbinstance = DbConnection.get_instance()
     def create(self):
         pass
