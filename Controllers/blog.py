@@ -8,7 +8,7 @@ router = APIRouter()
 @router.get("/")
 async def get_all_blogs():
     from Models.Models import Blog
-    blogs = Blog.get_all()
+    blogs = await Blog.get_all()
     return [blog.to_dict() for blog in blogs]
 @router.get("/{id}")
 async def get_blog(id:int):
