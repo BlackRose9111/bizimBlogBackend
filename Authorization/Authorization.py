@@ -12,6 +12,7 @@ class Authorization():
             'id': user.id,
             'exp': datetime.utcnow() + timedelta(days=30),
             'iat': datetime.utcnow()
+
         }
         token = jwt.encode(payload, self.jwt_secret, algorithm='HS256')
         return token
@@ -30,9 +31,7 @@ class Authorization():
         if id == None:
             return None
         return User.get(id)
-    def get_user_by_email(self,email):
-        from Models.Models import User
-        return User.find_where(email=email)
+
 
     @staticmethod
     def get_instance():
