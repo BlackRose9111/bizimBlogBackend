@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from Controllers import User,Authentication,blog
+from Controllers import User,Authentication,blog,Category
 
 app = FastAPI()
 
@@ -11,6 +11,7 @@ app.add_middleware(CORSMiddleware, allow_origins=allowed_origins, allow_credenti
 app.include_router(User.router, prefix="/user", tags=["user"])
 app.include_router(blog.router, prefix="/blog", tags=["blog"])
 app.include_router(Authentication.router, prefix="/auth", tags=["auth"])
+app.include_router(Category.router, prefix="/categories", tags=["categories"])
 
 
 
