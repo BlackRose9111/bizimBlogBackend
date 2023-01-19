@@ -179,13 +179,17 @@ class Blog(Model):
             setattr(self,key,value)
     def create(self):
         context = DbConnection.get_instance()
-        if self.author == None:
-            return False
+
+        if type(self.author) == User:
+            author = self.author.id
+        else:
+            author = self.author
+
         if self.category == None:
             category = None
         else:
             category = self.category.id
-        context.execute("INSERT INTO blog (author,title,content,created,updated,category) VALUES (%s,%s,%s,%s,%s,%s)",(self.author.id,self.title,self.content,self.created,self.updated,category))
+        context.execute("INSERT INTO blog (author,title,content,created,updated,category) VALUES (%s,%s,%s,%s,%s,%s)",(author,self.title,self.content,self.created,self.updated,category))
         self.id = context.last_id()
         print("Blog created with id: ",self.id)
         return self.id
