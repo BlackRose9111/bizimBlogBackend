@@ -263,4 +263,19 @@ class Blog(Model):
         if blogs == None:
             return None
         return [Blog(**blog) for blog in blogs]
+    @staticmethod
+    async def search(searchParameter,start = None,end = None):
+        dbinstance = DbConnection.get_instance()
+        searchParameter = "%"+searchParameter+"%"
+        if start == None and end == None:
+            blogs = dbinstance.fetch("SELECT * FROM blog WHERE title LIKE %s OR content LIKE %s OR description LIKE %s",(searchParameter,searchParameter,searchParameter))
+        elif start == None:
+            blogs = dbinstance.fetch("SELECT * FROM blog WHERE title LIKE %s OR content LIKE %s OR description LIKE %s LIMIT %s",(searchParameter,searchParameter,searchParameter,end))
+        elif end == None:
+            blogs = dbinstance.fetch("SELECT * FROM blog WHERE title LIKE %s OR content LIKE %s OR description LIKE %s LIMIT %s OFFSET %s",(searchParameter,searchParameter,searchParameter,start,start))
+        else:
+            blogs = dbinstance.fetch("SELECT * FROM blog WHERE title LIKE %s OR content LIKE %s OR description LIKE %s LIMIT %s OFFSET %s",(searchParameter,searchParameter,searchParameter,end,start))
+        if blogs == None:
+            return None
+        return [Blog(**blog) for blog in blogs]
 
