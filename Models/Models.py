@@ -156,7 +156,10 @@ class Blog(Model):
         blogs = dbinstance.fetch("SELECT * FROM blog WHERE 1")
         if blogs == None:
             return None
-        return [Blog(**blog) for blog in blogs]
+        bloglist = [Blog(**blog) for blog in blogs]
+        for blog in bloglist:
+            blog.author = User.get(blog.author)
+        return bloglist
     @staticmethod
     async def find_where(**kwargs):
         dbinstance = DbConnection.get_instance()
