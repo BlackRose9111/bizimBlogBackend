@@ -190,7 +190,7 @@ class Blog(Model):
             category = None
         else:
             category = self.category.id
-        context.execute("INSERT INTO blog (author,title,content,created,updated,category,description) VALUES (%s,%s,%s,%s,%s,%s)",(author,self.title,self.content,self.created,self.updated,category,description))
+        context.execute("INSERT INTO blog (author,title,content,created,updated,category,description) VALUES (%s,%s,%s,%s,%s,%s,%s)",(author,self.title,self.content,self.created,self.updated,category,self.description))
         self.id = context.last_id()
         self.created = datetime.now()
         self.updated = datetime.now()
@@ -210,7 +210,7 @@ class Blog(Model):
         else:
             category = self.category.id
 
-        context.execute("UPDATE blog SET author=%s,title=%s,content=%s,created=%s,updated=%s,category =%s WHERE id=%s",(author,self.title,self.content,self.created,self.updated,category,self.id))
+        context.execute("UPDATE blog SET author=%s,title=%s,content=%s,created=%s,updated=%s,category =%s , description =%s WHERE id=%s",(author,self.title,self.content,self.created,self.updated,category,self.author,self.description,self.id))
         print("Blog updated with id: ",self.id)
         return True
 
