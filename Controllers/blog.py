@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.params import Header
 
 from Models.DTO import CreateBlogDTO
+from Models.Models import User, Category
 
 router = APIRouter()
 
@@ -28,7 +29,7 @@ async def create_blog(blogdto : CreateBlogDTO,token : str = Header(default=None,
     user = Authorization.get_instance().get_user(token)
     if user == None:
         raise HTTPException(status_code=401, detail="Unauthorized")
-    blog = Blog(title=blogdto.title,content=blogdto.content,author=blogdto.author)
+    blog = Blog(title=blogdto.title,content=blogdto.content,author=User.get(blogdto.author),category=Category.get(blogdto.category))
     blog.create()
     blogdto = DTO(id=blog.id,title=blog.title,content=blog.content,author=blog.author)
     return {"message":"Blog created","blog":blogdto}
