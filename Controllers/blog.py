@@ -26,9 +26,9 @@ async def get_blogs(start:int,limit:int):
 
 
 @router.get("/search/")
-async def get_from_search(search:str,start:int = None,end:int = None):
+async def get_from_search(search:str,start:int = None,limit:int = None):
     from Models.Models import Blog
-    blogs = await Blog.search(search,start,end)
+    blogs = await Blog.search(search,start,limit)
     if blogs == None:
         raise HTTPException(status_code=404, detail="Blog not found")
     return {"message":f"Blogs found","blogs":[blog for blog in blogs]}

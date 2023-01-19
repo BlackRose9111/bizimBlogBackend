@@ -264,18 +264,21 @@ class Blog(Model):
             return None
         return [Blog(**blog) for blog in blogs]
     @staticmethod
-    async def search(searchParameter,start = None,end = None):
+    async def search(searchParameter,start = None,limit = None):
         dbinstance = DbConnection.get_instance()
         searchParameter = "%"+searchParameter+"%"
-        if start == None and end == None:
-            blogs = dbinstance.fetch("SELECT * FROM blog WHERE title LIKE %s OR content LIKE %s OR description LIKE %s",(searchParameter,searchParameter,searchParameter))
-        elif start == None:
-            blogs = dbinstance.fetch("SELECT * FROM blog WHERE title LIKE %s OR content LIKE %s OR description LIKE %s LIMIT %s",(searchParameter,searchParameter,searchParameter,end))
-        elif end == None:
-            blogs = dbinstance.fetch("SELECT * FROM blog WHERE title LIKE %s OR content LIKE %s OR description LIKE %s LIMIT %s OFFSET %s",(searchParameter,searchParameter,searchParameter,start,start))
-        else:
-            blogs = dbinstance.fetch("SELECT * FROM blog WHERE title LIKE %s OR content LIKE %s OR description LIKE %s LIMIT %s OFFSET %s",(searchParameter,searchParameter,searchParameter,end,start))
+        if start == None:
+            start = 0
+        if limit == None:
+            limit = 10
+        blogs = dbinstance.fetch("SELECT * FROM blog WHERE title LIKE %s OR content LIKE %s OR description LIKE %s ORDER BY created DESC LIMIT %s,%s",(searchParameter,searchParameter,searchParameter,start,limit))
         if blogs == None:
             return None
-        return [Blog(**blog) for blog in blogs]
+        bloglist = [Blog(**blog) for blog in blogs]
+        for blog in bloglist:
+            author = User.get(blog.author)
+            author.password = None
+            blog.author = author
+            blog.category = Category.get(blog.category)
 
+        return bloglist
