@@ -150,7 +150,7 @@ class Blog(Model):
             return None
         author = User.get(blog["author"])
         author.password = None
-        blog.author = author
+        blog["author"] = author
         return Blog(**blog)
     @staticmethod
     async def get_all():
