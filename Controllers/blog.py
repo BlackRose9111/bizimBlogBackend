@@ -12,6 +12,15 @@ async def get_all_blogs():
     from Models.Models import Blog
     blogs = await Blog.get_all()
     return {"message":"Blogs found","blogs":[blog for blog in blogs]}
+
+
+
+@router.get("/{start}/{end}")
+async def get_blogs(start:int,end:int):
+    from Models.Models import Blog
+    blogs = await Blog.get_all()
+    return {"message":"Blogs found","blogs":[blog for blog in blogs][start:end]}
+
 @router.get("/{id}")
 async def get_blog(id:int):
     from Models.Models import Blog
