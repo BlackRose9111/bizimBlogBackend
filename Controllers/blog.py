@@ -35,7 +35,7 @@ async def create_blog(blogdto : CreateBlogDTO,request : Request):
 
     category = Category.get(blogdto.category)
 
-    blog = Blog(title=blogdto.title,content=blogdto.content,author=author,category=category)
+    blog = Blog(title=blogdto.title,content=blogdto.content,author=author,category=category,description=blogdto.description)
     try:
         blog.create()
     except:
