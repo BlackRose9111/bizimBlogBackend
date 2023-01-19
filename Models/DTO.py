@@ -65,3 +65,10 @@ class UserInfoDTO(DTO):
 class CreateCategoryDTO(DTO):
     name : str = None
 
+class EditUserDTO(DTO):
+    name : str = None
+    surname : str = None
+    email : str = None
+    password : str = None
+    superadmin : bool = False
+

@@ -4,7 +4,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 import Models.DTO
-from Models.DTO import CreateUserDTO
+from Models.DTO import *
 
 router = APIRouter()
 @router.get("/test/")
@@ -40,24 +40,27 @@ async def create_user(userdto: CreateUserDTO):
     userdto = DTO(id=user.id,name=user.name,surname=user.surname,email=user.email)
     return {"message":"User created","user":userdto}
 @router.put("/")
-async def update_user(user,token):
+async def update_user(updateUserDTO : EditUserDTO, request : Request):
     from Models.Models import User
     from Authorization.Authorization import Authorization
     from Models.DTO import DTO
+    token = request.headers.get("authorization")
     if Authorization.get_instance().get_user(token) == None:
         return {"message":"Unauthorized" }
-    User = User.get(user.id)
+    User = Authorization.get_instance().get_user(token)
     if User == None:
         return {"message":"User not found"}
-    User.name = user.name
-    User.surname = user.surname
-    User.email = user.email
-    User.password = user.password
+    User.name = updateUserDTO.name
+    User.surname = updateUserDTO.surname
+    User.email = updateUserDTO.email
+    User.set_password(updateUserDTO.password)
+    User.update()
+    User.password = None
     try:
         User.update()
     except:
         raise HTTPException(detail="User could not be updated",status_code=500)
-    userdto = DTO(id=user.id,name=User.name,surname=User.surname,email=User.email)
+    userdto = User
     return {"message":"User updated","user":userdto.to_json()}
 @router.delete("/")
 async def delete_user(token):
@@ -65,5 +68,6 @@ async def delete_user(token):
     user = Authorization.get_instance().get_user(token)
     if user == None:
         return {"message":"Unauthorized" }
+
     user.delete()
     return {"message":"User deleted"}
