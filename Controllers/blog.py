@@ -37,11 +37,11 @@ async def create_blog(blogdto : CreateBlogDTO,token):
 
 @router.put("/")
 async def update_blog(blogdto : EditBlogDTO,request : Request):
-    token = request.headers.get("Authorization")
+    AuthorizationToken = request.headers.get("Authorization")
     from Models.Models import Blog
     from Models.DTO import DTO
     from Authorization.Authorization import Authorization
-    user = Authorization.get_instance().get_user(token)
+    user = Authorization.get_instance().get_user(AuthorizationToken)
     if user == None:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
