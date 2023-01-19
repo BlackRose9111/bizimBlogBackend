@@ -31,7 +31,9 @@ async def get_from_search(search:str,start:int = None,limit:int = None):
     blogs = await Blog.search(search,start,limit)
     for blog in blogs:
         blog.category = await Category.find_where(id=blog.category)
+        blog.category = blog.category[0]
         blog.author = await User.find_where(id=blog.author)
+        blog.author = blog.author[0]
         blog.author.password = None
     if blogs == None:
         raise HTTPException(status_code=404, detail="Blog not found")
