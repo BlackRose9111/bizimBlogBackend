@@ -60,8 +60,8 @@ async def update_user(updateUserDTO : EditUserDTO, request : Request):
         User.update()
     except:
         raise HTTPException(detail="User could not be updated",status_code=500)
-    userdto = User
-    return {"message":"User updated","user":userdto.to_json()}
+    userdto = UserInfoDTO(id=User.id,name=User.name,surname=User.surname,email=User.email,superadmin=User.superadmin)
+    return {"message":"User updated","user":userdto}
 
 async def delete_user(token):
     from Authorization.Authorization import Authorization
