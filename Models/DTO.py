@@ -45,7 +45,6 @@ class CreateBlogDTO(DTO):
 
     title : str = None
     content : str = None
-    author : int = None
     category : int = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
