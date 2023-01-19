@@ -41,11 +41,13 @@ class EditBlogDTO(DTO):
     id : int = None
     author : int = None
     category : int = None
+    description : str = None
 class CreateBlogDTO(DTO):
 
     title : str = None
     content : str = None
     category : int = None
+    description : str = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -59,9 +61,7 @@ class UserInfoDTO(DTO):
     surname : str = None
     email : str = None
     superadmin : bool = False
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+
 class CreateCategoryDTO(DTO):
     name : str = None
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+

@@ -171,6 +171,7 @@ class Blog(Model):
     title : str = None
     content : str = None
     category : Category = None
+    description : str = None
     created : datetime = None
     updated : datetime = None
     def __init__(self,**kwargs):
@@ -189,7 +190,7 @@ class Blog(Model):
             category = None
         else:
             category = self.category.id
-        context.execute("INSERT INTO blog (author,title,content,created,updated,category) VALUES (%s,%s,%s,%s,%s,%s)",(author,self.title,self.content,self.created,self.updated,category))
+        context.execute("INSERT INTO blog (author,title,content,created,updated,category,description) VALUES (%s,%s,%s,%s,%s,%s)",(author,self.title,self.content,self.created,self.updated,category,description))
         self.id = context.last_id()
         self.created = datetime.now()
         self.updated = datetime.now()
