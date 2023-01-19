@@ -35,7 +35,12 @@ class CreateUserDTO(DTO):
     email : str = None
     password : str = None
 
-
+class EditBlogDTO(DTO):
+    title : str = None
+    content : str = None
+    id : int = None
+    author : int = None
+    category : int = None
 class CreateBlogDTO(DTO):
 
     title : str = None

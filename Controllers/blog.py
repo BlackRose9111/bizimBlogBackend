@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.params import Header
+from starlette.requests import Request
 
-from Models.DTO import CreateBlogDTO
+from Models.DTO import CreateBlogDTO, EditBlogDTO
 from Models.Models import User, Category
 
 router = APIRouter()
@@ -22,7 +23,7 @@ async def get_blog(id:int):
     return {"message":"Blog found","blog":blog}
 
 @router.post("/")
-async def create_blog(blogdto : CreateBlogDTO,token : str = Header(default=None,description="Authorization token")):
+async def create_blog(blogdto : CreateBlogDTO,token):
     from Models.Models import Blog
     from Models.DTO import DTO
     from Authorization.Authorization import Authorization
@@ -35,7 +36,8 @@ async def create_blog(blogdto : CreateBlogDTO,token : str = Header(default=None,
     return {"message":"Blog created","blog":blogdto}
 
 @router.put("/")
-async def update_blog(blogdto : CreateBlogDTO,token):
+async def update_blog(blogdto : EditBlogDTO,request : Request):
+    token = request.headers.get("Authorization")
     from Models.Models import Blog
     from Models.DTO import DTO
     from Authorization.Authorization import Authorization
@@ -48,7 +50,8 @@ async def update_blog(blogdto : CreateBlogDTO,token):
         raise HTTPException(status_code=404, detail="Blog not found")
     blog.title = blogdto.title
     blog.content = blogdto.content
-    blog.author = blogdto.author
+    blog.author = User.get(blogdto.author)
+    blog.category = Category.get(blogdto.category)
     blog.update()
     blogdto = DTO(id=blog.id,title=blog.title,content=blog.content,author=blog.author)
     return {"message":"Blog updated","blog":blogdto}

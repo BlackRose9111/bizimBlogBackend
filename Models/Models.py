@@ -72,7 +72,8 @@ class User(Model):
     def delete(self):
         if self.id == None:
             return False
-        self.dbinstance.execute("DELETE FROM user WHERE id=%s",(self.id,))
+        context = DbConnection.get_instance()
+        context.execute("DELETE FROM user WHERE id=%s",(self.id,))
         print("User deleted with id: ",self.id)
         return True
     @staticmethod
@@ -114,7 +115,7 @@ class Category(Model):
     def create(self):
         context = DbConnection.get_instance()
         context.execute("INSERT INTO category (name) VALUES (%s)",(self.name,))
-        self.id = self.dbinstance.last_id()
+        self.id = context.dbinstance.last_id()
         print("Category created with id: ",self.id)
         return self.id
 
@@ -178,7 +179,7 @@ class Blog(Model):
     def create(self):
         context = DbConnection.get_instance()
         context.execute("INSERT INTO blog (author,title,content,created,updated,category) VALUES (%s,%s,%s,%s,%s,%s)",(self.author.id,self.title,self.content,self.created,self.updated,self.category.id))
-        self.id = self.dbinstance.last_id()
+        self.id = context.last_id()
         print("Blog created with id: ",self.id)
         return self.id
 
