@@ -148,7 +148,9 @@ class Blog(Model):
             return None
         if blog == None:
             return None
-        blog["author"] = User.get(blog["author"])
+        author = User.get(blog["author"])
+        author.password = None
+        blog.author = author
         return Blog(**blog)
     @staticmethod
     async def get_all():
@@ -158,7 +160,10 @@ class Blog(Model):
             return None
         bloglist = [Blog(**blog) for blog in blogs]
         for blog in bloglist:
-            blog.author = User.get(blog.author)
+            author = User.get(blog.author)
+            author.password = None
+            blog.author = author
+
         return bloglist
     @staticmethod
     async def find_where(**kwargs):
