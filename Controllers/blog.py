@@ -17,8 +17,8 @@ async def get_blog(id:int):
     blog = Blog.get(id)
     if blog == None:
         raise HTTPException(status_code=404, detail="Blog not found")
-    blogdto = DTO(id=blog.id,title=blog.title,content=blog.content,author=blog.author)
-    return {"message":"Blog found","blog":blogdto}
+
+    return {"message":"Blog found","blog":blog}
 
 @router.post("/")
 async def create_blog(blogdto : CreateBlogDTO,token : str = Header(default=None,description="Authorization token")):
