@@ -56,3 +56,7 @@ class UserInfoDTO(DTO):
     superadmin : bool = False
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+class CreateCategoryDTO(DTO):
+    name : str = None
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

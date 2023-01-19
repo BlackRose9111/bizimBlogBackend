@@ -110,6 +110,7 @@ class Blog(Model):
     author : User = None
     title : str = None
     content : str = None
+    category : Category = None
     created : datetime = None
     updated : datetime = None
     def __init__(self,**kwargs):
@@ -151,6 +152,7 @@ class Blog(Model):
         author = User.get(blog["author"])
         author.password = None
         blog["author"] = author
+        blog["category"] = Category.get(blog["category"])
         return Blog(**blog)
     @staticmethod
     async def get_all():
@@ -163,6 +165,7 @@ class Blog(Model):
             author = User.get(blog.author)
             author.password = None
             blog.author = author
+            blog.category = Category.get(blog.category)
 
         return bloglist
     @staticmethod
@@ -179,3 +182,62 @@ class Blog(Model):
             return None
         return [Blog(**blog) for blog in blogs]
 
+class Category(Model):
+    name : str = None
+    def __init__(self,**kwargs):
+        super().__init__()
+        for key,value in kwargs.items():
+            setattr(self,key,value)
+    def create(self):
+        context = DbConnection.get_instance()
+        context.execute("INSERT INTO category (name) VALUES (%s)",(self.name,))
+        self.id = self.dbinstance.last_id()
+        print("Category created with id: ",self.id)
+        return self.id
+
+    def update(self):
+        if self.id == None:
+            return False
+        context = DbConnection.get_instance()
+        context.execute("UPDATE category SET name=%s WHERE id=%s",(self.name,self.id))
+        print("Category updated with id: ",self.id)
+        return True
+
+    def delete(self):
+        if self.id == None:
+            return False
+        context = DbConnection.get_instance()
+        context.execute("DELETE FROM category WHERE id=%s",(self.id,))
+        print("Category deleted with id: ",self.id)
+        return True
+
+    @staticmethod
+    def get(id):
+        dbinstance = DbConnection.get_instance()
+        try:
+            category = dbinstance.fetch("SELECT * FROM category WHERE id=%s",(id,))[0]
+        except:
+            return None
+        if category == None:
+            return None
+        return category(**category)
+    @staticmethod
+    async def get_all():
+        dbinstance = DbConnection.get_instance()
+        categories = dbinstance.fetch("SELECT * FROM category WHERE 1")
+        if categories == None:
+            return None
+        return [category(**category) for category in categories]
+    @staticmethod
+    async def find_where(**kwargs):
+        dbinstance = DbConnection.get_instance()
+        query = "SELECT * FROM category WHERE "
+        values = []
+        for key,value in kwargs.items():
+            query += key + "=%s AND "
+            values.append(value)
+        query = query[:-4]
+        categories = dbinstance.fetch(query,tuple(values))
+        if categories == None:
+            return None
+        return [category(**category) for category in categories]
