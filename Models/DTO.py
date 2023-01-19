@@ -37,7 +37,7 @@ class CreateUserDTO(DTO):
 
 
 class CreateBlogDTO(DTO):
-    id : int = None
+
     title : str = None
     content : str = None
     author : int = None
