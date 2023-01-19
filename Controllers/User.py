@@ -58,10 +58,9 @@ async def update_user(updateUserDTO : EditUserDTO, request : Request):
         User.email = updateUserDTO.email
     if updateUserDTO.password is not None and User.password != updateUserDTO.password:
         User.set_password(updateUserDTO.password)
-    User.update()
-    User.password = None
     try:
         User.update()
+        User.password = None
     except:
         raise HTTPException(detail="User could not be updated",status_code=500)
     userdto = UserInfoDTO(id=User.id,name=User.name,surname=User.surname,email=User.email,superadmin=User.superadmin)
