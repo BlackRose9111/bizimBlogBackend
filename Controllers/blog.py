@@ -29,6 +29,10 @@ async def get_blogs(start:int,limit:int):
 async def get_from_search(search:str,start:int = None,limit:int = None):
     from Models.Models import Blog
     blogs = await Blog.search(search,start,limit)
+    for blog in blogs:
+        blog.category = await Category.find_where(id=blog.category_id)
+        blog.user = await User.find_where(id=blog.user_id)
+        blog.user.password = None
     if blogs == None:
         raise HTTPException(status_code=404, detail="Blog not found")
     return {"message":f"Blogs found","blogs":[blog for blog in blogs]}
