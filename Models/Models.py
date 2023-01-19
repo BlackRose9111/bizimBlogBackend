@@ -22,6 +22,9 @@ class Model(pydantic.BaseModel):
         from json import dumps
         return dumps(self.__dict__)
 
+    def to_dict(self):
+        return self.__dict__
+
     @staticmethod
     def get(id):
         pass
