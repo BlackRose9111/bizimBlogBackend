@@ -7,7 +7,6 @@ import bcrypt
 
 class Model(pydantic.BaseModel):
     id : int = None
-    dbinstance = None
     def __init__(self):
         super().__init__()
         self.dbinstance = DbConnection.get_instance()
@@ -48,8 +47,9 @@ class User(Model):
 
 
     def create(self):
-        self.dbinstance.execute("INSERT INTO user (name,surname,email,password) VALUES (%s,%s,%s,%s)",(self.name,self.surname,self.email,self.password))
-        self.id = self.dbinstance.last_id()
+        context = DbConnection.get_instance()
+        context.execute("INSERT INTO user (name,surname,email,password) VALUES (%s,%s,%s,%s)",(self.name,self.surname,self.email,self.password))
+        self.id = context.last_id()
         print("User created with id: ",self.id)
         return self.id
     def set_password(self,password):
@@ -63,7 +63,8 @@ class User(Model):
     def update(self):
         if self.id == None:
             return False
-        self.dbinstance.execute("UPDATE user SET name=%s,surname=%s,email=%s,password=%s WHERE id=%s",(self.name,self.surname,self.email,self.password,self.id))
+        context = DbConnection.get_instance()
+        context.execute("UPDATE user SET name=%s,surname=%s,email=%s,password=%s WHERE id=%s",(self.name,self.surname,self.email,self.password,self.id))
         print("User updated with id: ",self.id)
         return True
     def delete(self):
@@ -114,7 +115,8 @@ class Blog(Model):
         for key,value in kwargs.items():
             setattr(self,key,value)
     def create(self):
-        self.dbinstance.execute("INSERT INTO blog (author,title,content,created,updated) VALUES (%s,%s,%s,%s,%s)",(self.author.id,self.title,self.content,self.created,self.updated))
+        context = DbConnection.get_instance()
+        context.execute("INSERT INTO blog (author,title,content,created,updated) VALUES (%s,%s,%s,%s,%s)",(self.author.id,self.title,self.content,self.created,self.updated))
         self.id = self.dbinstance.last_id()
         print("Blog created with id: ",self.id)
         return self.id
@@ -122,14 +124,16 @@ class Blog(Model):
     def update(self):
         if self.id == None:
             return False
-        self.dbinstance.execute("UPDATE blog SET author=%s,title=%s,content=%s,created=%s,updated=%s WHERE id=%s",(self.author.id,self.title,self.content,self.created,self.updated,self.id))
+        context = DbConnection.get_instance()
+        context.execute("UPDATE blog SET author=%s,title=%s,content=%s,created=%s,updated=%s WHERE id=%s",(self.author.id,self.title,self.content,self.created,self.updated,self.id))
         print("Blog updated with id: ",self.id)
         return True
 
     def delete(self):
         if self.id == None:
             return False
-        self.dbinstance.execute("DELETE FROM blog WHERE id=%s",(self.id,))
+        context = DbConnection.get_instance()
+        context.execute("DELETE FROM blog WHERE id=%s",(self.id,))
         print("Blog deleted with id: ",self.id)
         return True
 
