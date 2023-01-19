@@ -66,6 +66,7 @@ class User(Model):
         if self.id == None:
             return False
         context = DbConnection.get_instance()
+
         context.execute("UPDATE user SET name=%s,surname=%s,email=%s,password=%s WHERE id=%s",(self.name,self.surname,self.email,self.password,self.id))
         print("User updated with id: ",self.id)
         return True
@@ -187,8 +188,16 @@ class Blog(Model):
         if self.id == None:
             return False
         context = DbConnection.get_instance()
+        if self.author == None:
+            author = None
+        else:
+            author = self.author.id
+        if self.category == None:
+            category = None
+        else:
+            category = self.category.id
 
-        context.execute("UPDATE blog SET author=%s,title=%s,content=%s,created=%s,updated=%s,category =%s WHERE id=%s",(self.author.id,self.title,self.content,self.created,self.updated,self.category.id,self.id))
+        context.execute("UPDATE blog SET author=%s,title=%s,content=%s,created=%s,updated=%s,category =%s WHERE id=%s",(author,self.title,self.content,self.created,self.updated,category,self.id))
         print("Blog updated with id: ",self.id)
         return True
 
