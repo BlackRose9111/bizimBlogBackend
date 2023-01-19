@@ -27,7 +27,10 @@ async def create_category(categorydto : CreateCategoryDTO,token : str = Header(d
     if user == None:
         raise HTTPException(status_code=401, detail="Unauthorized")
     category = Category(name=categorydto.name)
-    category.create()
+    try:
+        category.create()
+    except:
+        raise HTTPException(status_code=400, detail="Category could not be created")
     categorydto = DTO(id=category.id,name=category.name)
     return {"message":"Category created","category":categorydto}
 
@@ -44,6 +47,9 @@ async def update_category(categorydto : CreateCategoryDTO,token,id):
     if category == None:
         raise HTTPException(status_code=404, detail="Category not found")
     category.name = categorydto.name
-    category.update()
+    try:
+        category.update()
+    except:
+        raise HTTPException(status_code=400, detail="Category could not be updated")
     categorydto = category
     return {"message":"Category updated","category":categorydto}

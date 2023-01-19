@@ -25,7 +25,6 @@ async def get_blog(id:int):
 @router.post("/")
 async def create_blog(blogdto : CreateBlogDTO,request : Request):
     from Models.Models import Blog
-    from Models.DTO import DTO
     from Authorization.Authorization import Authorization
     token = request.headers["Authorization"]
     user = Authorization.get_instance().get_user(token)
@@ -37,8 +36,10 @@ async def create_blog(blogdto : CreateBlogDTO,request : Request):
     category = Category.get(blogdto.category)
 
     blog = Blog(title=blogdto.title,content=blogdto.content,author=author,category=category)
-
-    blog.create()
+    try:
+        blog.create()
+    except:
+        raise HTTPException(status_code=400, detail="Blog could not be created")
     print(f"{blog.title} created")
 
     return {"message":"Blog created","blog":blog}
@@ -60,7 +61,10 @@ async def update_blog(request : Request,blogdto : EditBlogDTO):
     blog.content = blogdto.content
     blog.author = User.get(blogdto.author)
     blog.category = Category.get(blogdto.category)
-    blog.update()
+    try:
+        blog.update()
+    except:
+        raise HTTPException(status_code=400, detail="Blog could not be updated")
     blogdto = DTO(id=blog.id,title=blog.title,content=blog.content,author=blog.author)
     return {"message":"Blog updated","blog":blogdto}
 @router.delete("/")

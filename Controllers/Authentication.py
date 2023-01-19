@@ -40,6 +40,9 @@ async def register(RegisterDTO : CreateUserDTO):
         raise HTTPException(status_code=400, detail="Email already exists")
     newUser = User(email=RegisterDTO.email,password=RegisterDTO.password,name=RegisterDTO.name,surname=RegisterDTO.surname)
     newUser.set_password(RegisterDTO.password)
-    newUser.create()
+    try:
+        newUser.create()
+    except:
+        raise HTTPException(status_code=500, detail="User could not be created")
     print(f"{newUser.email} created")
     return {"message":"User created"}

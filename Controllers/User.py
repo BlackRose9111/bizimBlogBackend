@@ -32,7 +32,11 @@ async def create_user(userdto: CreateUserDTO):
     print(userdto)
     user = User(name=userdto.name,surname=userdto.surname,email=userdto.email)
     user.set_password(userdto.password)
-    user.create()
+    try:
+        user.create()
+    except:
+        raise HTTPException(status_code=500, detail="User could not be created")
+
     userdto = DTO(id=user.id,name=user.name,surname=user.surname,email=user.email)
     return {"message":"User created","user":userdto}
 @router.put("/")
@@ -49,7 +53,10 @@ async def update_user(user,token):
     User.surname = user.surname
     User.email = user.email
     User.password = user.password
-    User.update()
+    try:
+        User.update()
+    except:
+        raise HTTPException(detail="User could not be updated",status_code=500)
     userdto = DTO(id=user.id,name=User.name,surname=User.surname,email=User.email)
     return {"message":"User updated","user":userdto.to_json()}
 @router.delete("/")
