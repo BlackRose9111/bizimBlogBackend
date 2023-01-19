@@ -50,10 +50,14 @@ async def update_user(updateUserDTO : EditUserDTO, request : Request):
     User = Authorization.get_instance().get_user(token)
     if User == None:
         return {"message":"User not found"}
-    User.name = updateUserDTO.name
-    User.surname = updateUserDTO.surname
-    User.email = updateUserDTO.email
-    User.set_password(updateUserDTO.password)
+    if updateUserDTO.name is not None and User.name != updateUserDTO.name:
+        User.name = updateUserDTO.name
+    if updateUserDTO.surname is not None and User.surname != updateUserDTO.surname:
+        User.surname = updateUserDTO.surname
+    if updateUserDTO.email is not None and User.email != updateUserDTO.email:
+        User.email = updateUserDTO.email
+    if updateUserDTO.password is not None and User.password != updateUserDTO.password:
+        User.set_password(updateUserDTO.password)
     User.update()
     User.password = None
     try:
