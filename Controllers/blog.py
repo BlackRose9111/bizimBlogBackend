@@ -32,6 +32,7 @@ async def create_blog(blogdto : CreateBlogDTO,request : Request):
     if user == None:
         raise HTTPException(status_code=401, detail="Unauthorized")
     author =User.get(user.id)
+    author.password = None
 
     category = Category.get(blogdto.category)
 
