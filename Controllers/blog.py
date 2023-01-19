@@ -23,10 +23,11 @@ async def get_blog(id:int):
     return {"message":"Blog found","blog":blog}
 
 @router.post("/")
-async def create_blog(blogdto : CreateBlogDTO,token):
+async def create_blog(blogdto : CreateBlogDTO,request : Request):
     from Models.Models import Blog
     from Models.DTO import DTO
     from Authorization.Authorization import Authorization
+    token = request.headers["Authorization"]
     user = Authorization.get_instance().get_user(token)
     if user == None:
         raise HTTPException(status_code=401, detail="Unauthorized")
