@@ -49,6 +49,29 @@ async def get_blog(id:int):
 
     return {"message":"Blog found","blog":blog}
 
+@router.get("/author/{id}")
+async def get_blogs_by_author(id:int):
+    from Models.Models import Blog
+    blogs = await Blog.find_where(user_id=id)
+    for blog in blogs:
+        blog.category = await Category.find_where(id=blog.category_id)
+        blog.user = await User.find_where(id=blog.user_id)
+        blog.user.password = None
+    if blogs == None:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    return {"message":f"Blogs found","blogs":[blog for blog in blogs]}
+@router.get("/category/{id}")
+async def get_blogs_by_category(id:int):
+    from Models.Models import Blog
+    blogs = await Blog.find_where(category_id=id)
+    for blog in blogs:
+        blog.category = await Category.find_where(id=blog.category_id)
+        blog.user = await User.find_where(id=blog.user_id)
+        blog.user.password = None
+    if blogs == None:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    return {"message":f"Blogs found","blogs":[blog for blog in blogs]}
+
 @router.post("/")
 async def create_blog(blogdto : CreateBlogDTO,request : Request):
     from Models.Models import Blog
