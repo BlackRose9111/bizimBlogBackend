@@ -36,7 +36,7 @@ async def create_blog(blogdto : CreateBlogDTO,token):
     return {"message":"Blog created","blog":blogdto}
 
 @router.put("/")
-async def update_blog(blogdto : EditBlogDTO,request : Request):
+async def update_blog(request : Request,blogdto : EditBlogDTO):
     AuthorizationToken = request.headers.get("Authorization")
     from Models.Models import Blog
     from Models.DTO import DTO
