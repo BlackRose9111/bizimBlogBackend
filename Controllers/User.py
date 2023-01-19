@@ -62,7 +62,7 @@ async def update_user(updateUserDTO : EditUserDTO, request : Request):
         raise HTTPException(detail="User could not be updated",status_code=500)
     userdto = User
     return {"message":"User updated","user":userdto.to_json()}
-@router.delete("/")
+
 async def delete_user(token):
     from Authorization.Authorization import Authorization
     user = Authorization.get_instance().get_user(token)
