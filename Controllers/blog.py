@@ -34,7 +34,7 @@ async def create_blog(blogdto : CreateBlogDTO,request : Request):
     blog = Blog(title=blogdto.title,content=blogdto.content,author=User.get(blogdto.author),category=Category.get(blogdto.category))
     blog.create()
 
-    return {"message":"Blog created","blog":blog}
+    return {"message":"Blog created","blog":blogdto}
 
 @router.put("/")
 async def update_blog(request : Request,blogdto : EditBlogDTO):
