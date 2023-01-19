@@ -25,7 +25,7 @@ async def get_blogs(start:int,limit:int):
     return {"message":"Blogs found","blogs":[blog for blog in blogs[start:end]]}
 
 
-@router.get("/")
+@router.get("/search")
 async def get_from_search(search:str,start:int = None,limit:int = None):
     from Models.Models import Blog
     blogs = await Blog.search(search,start,limit)
