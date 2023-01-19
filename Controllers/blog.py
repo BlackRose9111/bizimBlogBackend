@@ -31,10 +31,16 @@ async def create_blog(blogdto : CreateBlogDTO,request : Request):
     user = Authorization.get_instance().get_user(token)
     if user == None:
         raise HTTPException(status_code=401, detail="Unauthorized")
-    blog = Blog(title=blogdto.title,content=blogdto.content,author=User.get(blogdto.author),category=Category.get(blogdto.category))
-    blog.create()
+    author =User.get(user.id)
 
-    return {"message":"Blog created","blog":blogdto}
+    category = Category.get(blogdto.category)
+
+    blog = Blog(title=blogdto.title,content=blogdto.content,author=author,category=category)
+
+    blog.create()
+    print(f"{blog.title} created")
+
+    return {"message":"Blog created","blog":blog}
 
 @router.put("/")
 async def update_blog(request : Request,blogdto : EditBlogDTO):

@@ -191,6 +191,8 @@ class Blog(Model):
             category = self.category.id
         context.execute("INSERT INTO blog (author,title,content,created,updated,category) VALUES (%s,%s,%s,%s,%s,%s)",(author,self.title,self.content,self.created,self.updated,category))
         self.id = context.last_id()
+        self.created = datetime.now()
+        self.updated = datetime.now()
         print("Blog created with id: ",self.id)
         return self.id
 
