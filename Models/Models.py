@@ -9,7 +9,6 @@ class Model(pydantic.BaseModel):
     id : int = None
     def __init__(self):
         super().__init__()
-        self.dbinstance = DbConnection.get_instance()
     def create(self):
         pass
     def update(self):
