@@ -33,8 +33,8 @@ async def create_blog(blogdto : CreateBlogDTO,request : Request):
         raise HTTPException(status_code=401, detail="Unauthorized")
     blog = Blog(title=blogdto.title,content=blogdto.content,author=User.get(blogdto.author),category=Category.get(blogdto.category))
     blog.create()
-    blogdto = DTO(id=blog.id,title=blog.title,content=blog.content,author=blog.author)
-    return {"message":"Blog created","blog":blogdto}
+
+    return {"message":"Blog created","blog":blog}
 
 @router.put("/")
 async def update_blog(request : Request,blogdto : EditBlogDTO):
