@@ -8,6 +8,7 @@ class DbConnection:
     def __init__(self):
         from environment import getconfig
         self.connection = connector.connect(user=getconfig("DATABASE_USER"), password=getconfig("DATABASE_PASSWORD"), host=getconfig("DATABASE_HOST"), database=getconfig("DATABASE_NAME"))
+        self.connection.autocommit = True
         self.cursor = self.connection.cursor(dictionary=True, buffered=True)
         self.keep_alive_thread = threading.Thread(target=self.keep_alive,daemon=True)
         self.keep_alive_thread.start()
