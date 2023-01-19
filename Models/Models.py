@@ -138,12 +138,12 @@ class Category(Model):
     def get(id):
         dbinstance = DbConnection.get_instance()
         try:
-            category = dbinstance.fetch("SELECT * FROM category WHERE id=%s",(id,))[0]
+            categorydict = dbinstance.fetch("SELECT * FROM category WHERE id=%s",(id,))[0]
         except:
             return None
-        if category == None:
+        if categorydict == None:
             return None
-        return category(**category)
+        return Category(**categorydict)
     @staticmethod
     async def get_all():
         dbinstance = DbConnection.get_instance()
