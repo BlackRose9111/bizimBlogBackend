@@ -239,7 +239,7 @@ class Blog(Model):
     @staticmethod
     async def get_all():
         dbinstance = DbConnection.get_instance()
-        blogs = dbinstance.fetch("SELECT * FROM blog WHERE 1")
+        blogs = dbinstance.fetch("SELECT * FROM blog WHERE 1 ORDER BY created DESC")
         if blogs == None:
             return None
         bloglist = [Blog(**blog) for blog in blogs]
