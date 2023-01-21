@@ -15,7 +15,8 @@ async def get_all_blogs(start:int = None,limit:int = None):
         limit = limit + start
         if limit > len(await Blog.get_all()):
             limit = len(await Blog.get_all())
-        allBlogs = await Blog.get_all()[start:limit]
+        allBlogs = await Blog.get_all()
+        allBlogs = allBlogs[start:limit]
     return {"message":"Blogs found","blogs":[blog for blog in allBlogs]}
 
 
