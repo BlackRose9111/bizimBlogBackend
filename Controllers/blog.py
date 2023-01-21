@@ -8,14 +8,23 @@ from Models.Models import User, Category
 router = APIRouter()
 
 @router.get("/")
-async def get_all_blogs():
+async def get_all_blogs(request : Request):
     from Models.Models import Blog
-    blogs = await Blog.get_all()
-    return {"message":"Blogs found","blogs":[blog for blog in blogs]}
+    if request.query_params.get("start") == None or request.query_params.get("limit") == None:
+        blogs = await Blog.get_all()
+        return {"message":"Blogs found","blogs":[blog for blog in blogs]}
+    elif request.query_params.get("start") != None and request.query_params.get("limit") != None:
+        blogs = await Blog.get_all()
+        blogs = blogs[int(request.query_params.get("start")):int(request.query_params.get("start")) + int(request.query_params.get("limit"))]
+        return {"message":"Blogs found","blogs":[blog for blog in blogs]}
+    else:
+        raise HTTPException(status_code=400, detail="Bad request")
 
 
 
-@router.get("/all/{start}/{limit}")
+
+
+
 async def get_blogs(start:int,limit:int):
     from Models.Models import Blog
     blogs = await Blog.get_all()
