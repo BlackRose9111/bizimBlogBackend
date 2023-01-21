@@ -56,7 +56,8 @@ async def get_blogs_by_author(author_id:int):
         blog.user.password = None
     if blogs == None:
         raise HTTPException(status_code=404, detail="Blog not found")
-    return {"message":f"Blogs found","blogs":[blog for blog in blogs]}
+    blogslist = [blog for blog in blogs]
+    return {"message":"Blogs found","blogs":blogslist}
 @router.get("/category/{id}")
 async def get_blogs_by_category(id:int):
     from Models.Models import Blog

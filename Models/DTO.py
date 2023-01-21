@@ -1,7 +1,8 @@
 import pydantic
+from pydantic import BaseModel, Field
 
 
-class DTO(pydantic.BaseModel):
+class DTO(BaseModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -30,10 +31,10 @@ class DTO(pydantic.BaseModel):
         from json import dumps
         return dumps(self.__dict__)
 class CreateUserDTO(DTO):
-    name : str = None
-    surname : str = None
-    email : str = None
-    password : str = None
+    name : str = Field(max_length=50,description="Name of the user",example="John",title="Name",min_length=2,regex="^[a-zA-Z]+$")
+    surname : str = Field(max_length=50,description="Surname of the user",example="Doe",title="Surname",min_length=2,regex="^[a-zA-Z]+$")
+    email : str = Field(max_length=50,description="Email of the user",regex="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",example="BlackRose@crownmail.net")
+    password : str = Field(max_length=50,description="Password of the user",example="123456",min_length=6,regex="^[a-zA-Z0-9]+$")
 
 class EditBlogDTO(DTO):
     title : str = None
