@@ -15,7 +15,7 @@ async def get_all_blogs():
 
 
 
-
+@router.get("/all/{start}/{limit}")
 async def get_blogs(start:int,limit:int):
     from Models.Models import Blog
     blogs = await Blog.get_all()
@@ -49,7 +49,7 @@ async def get_blog(id:int):
 async def get_blogs_by_author(author_id:int):
     from Models.Models import Blog
     blogs = await Blog.get_all()
-    return {"message":"Blogs found","blogs":[blog for blog in blogs if blog.author_id == author_id]}
+    return {"message":"Blogs found","blogs":[blog for blog in blogs if blog.author.id == author_id]}
 @router.get("/category/{id}")
 async def get_blogs_by_category(id:int):
     from Models.Models import Blog
