@@ -48,16 +48,8 @@ async def get_blog(id:int):
 @router.get("/author/{author_id}")
 async def get_blogs_by_author(author_id:int):
     from Models.Models import Blog
-    print(author_id)
-    blogs = await Blog.find_where(author=author_id)
-    for blog in blogs:
-        blog.category = await Category.find_where(id=blog.category)
-        blog.author = await User.find_where(id=blog.author)
-        blog.author.password = None
-    if blogs == None:
-        raise HTTPException(status_code=404, detail="Blog not found")
-    blogslist = [blog for blog in blogs]
-    return {"message":"Blogs found","blogs":blogslist}
+    blogs = await Blog.get_all()
+    return {"message":"Blogs found","blogs":[blog for blog in blogs if blog.author_id == author_id]}
 @router.get("/category/{id}")
 async def get_blogs_by_category(id:int):
     from Models.Models import Blog
