@@ -51,9 +51,9 @@ async def get_blogs_by_author(author_id:int):
     print(author_id)
     blogs = await Blog.find_where(author=author_id)
     for blog in blogs:
-        blog.category = await Category.find_where(id=blog.category_id)
-        blog.user = await User.find_where(id=blog.user_id)
-        blog.user.password = None
+        blog.category = await Category.find_where(id=blog.category)
+        blog.author = await User.find_where(id=blog.author)
+        blog.author.password = None
     if blogs == None:
         raise HTTPException(status_code=404, detail="Blog not found")
     blogslist = [blog for blog in blogs]
