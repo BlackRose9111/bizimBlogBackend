@@ -58,6 +58,7 @@ class LoginDto(DTO):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 class UserInfoDTO(DTO):
+    id : int = None
     name : str = None
     surname : str = None
     email : str = None
