@@ -3,35 +3,21 @@ from fastapi.params import Header
 from starlette.requests import Request
 
 from Models.DTO import CreateBlogDTO, EditBlogDTO
-from Models.Models import User, Category
+from Models.Models import User, Category, Blog
 
 router = APIRouter()
 
 @router.get("/")
-async def get_all_blogs(request : Request):
-    from Models.Models import Blog
-    if request.query_params.get("start") == None or request.query_params.get("limit") == None:
-        blogs = await Blog.get_all()
-        return {"message":"Blogs found","blogs":[blog for blog in blogs]}
-    elif request.query_params.get("start") != None and request.query_params.get("limit") != None:
-        blogs = await Blog.get_all()
-        blogs = blogs[int(request.query_params.get("start")):int(request.query_params.get("start")) + int(request.query_params.get("limit"))]
-        return {"message":"Blogs found","blogs":[blog for blog in blogs]}
+async def get_all_blogs(start:int = None,limit:int = None):
+    if start == None or limit == None:
+        allBlogs = await Blog.get_all()
     else:
-        raise HTTPException(status_code=400, detail="Bad request")
+        limit = limit + start
+        if limit > len(await Blog.get_all()):
+            limit = len(await Blog.get_all())
+        allBlogs = await Blog.get_all()[start:limit]
+    return {"message":"Blogs found","blogs":[blog for blog in allBlogs]}
 
-
-
-
-
-
-async def get_blogs(start:int,limit:int):
-    from Models.Models import Blog
-    blogs = await Blog.get_all()
-    end = start + limit
-    if end > len(blogs):
-        end = len(blogs)
-    return {"message":"Blogs found","blogs":[blog for blog in blogs[start:end]]}
 
 
 @router.get("/search")
