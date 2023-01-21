@@ -46,7 +46,8 @@ async def get_blog(id:int):
     return {"message":"Blog found","blog":blog}
 
 @router.get("/author/{id}")
-async def get_blogs_by_author(id):
+async def get_blogs_by_author(request : Request):
+    id = request.path_params["id"]
     from Models.Models import Blog
     blogs = await Blog.find_where(user_id=id)
     for blog in blogs:
