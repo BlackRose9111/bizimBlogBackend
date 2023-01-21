@@ -15,7 +15,7 @@ async def get_all_blogs():
 
 
 
-@router.get("/{start}/{limit}")
+
 async def get_blogs(start:int,limit:int):
     from Models.Models import Blog
     blogs = await Blog.get_all()
