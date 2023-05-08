@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException
 from fastapi.params import Header
 from starlette.requests import Request
 
-from Models.DTO import CreateBlogDTO, EditBlogDTO
-from Models.Models import User, Category, Blog
+from Models.DTO import CreateBlogDTO, EditBlogDTO, BlogWithCategoriesDTO
+from Models.Models import User, Category, Blog, blogCategory
 
 router = APIRouter()
 
@@ -17,7 +17,18 @@ async def get_all_blogs(start:int = None,limit:int = None):
             limit = len(await Blog.get_all())
         allBlogs = await Blog.get_all()
         allBlogs = allBlogs[start:limit]
-    return {"message":"Blogs found","blogs":[blog for blog in allBlogs]}
+    #we will convert these blogs to BlogWithCategoriesDTOs, which contain the blog object and a list of categories
+    blogDTOs = []
+    for blog in allBlogs:
+        blogDTO = BlogWithCategoriesDTO(blog=blog,categories=[])
+        blogDTOs.append(blogDTO)
+    #now we will add the categories to the blogDTOs
+    for blogDTO in blogDTOs:
+        #we will get the categories of each blog with the specially made method
+        categoriesOfThisBlog = blogCategory.get_all_categories_of_a_blog(blogDTO.blog)
+        blogDTO.categories = categoriesOfThisBlog
+
+    return {"message":"Blogs found","blogs":blogDTOs}
 
 
 
@@ -25,6 +36,7 @@ async def get_all_blogs(start:int = None,limit:int = None):
 async def get_from_search(search:str,start:int = None,limit:int = None):
     from Models.Models import Blog
     blogs = await Blog.search(search,start,limit)
+    
     if blogs == None:
         raise HTTPException(status_code=404, detail="Blog not found")
     return {"message":f"Blogs found","blogs":[blog for blog in blogs]}

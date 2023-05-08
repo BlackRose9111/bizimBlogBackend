@@ -1,5 +1,6 @@
 import pydantic
 from pydantic import BaseModel, Field
+from . import Models
 
 
 class DTO(BaseModel):
@@ -41,13 +42,13 @@ class EditBlogDTO(DTO):
     content : str = None
     id : int = None
     author : int = None
-    category : int = None
+    category : list[int] = []
     description : str = None
 class CreateBlogDTO(DTO):
 
     title : str = None
     content : str = None
-    category : int = None
+    category : list[int] = []
     description : str = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -73,4 +74,9 @@ class EditUserDTO(DTO):
     email : str = None
     password : str = None
     superadmin : bool = False
+
+class BlogWithCategoriesDTO(DTO):
+    blog : Models.Blog = None
+    categories : list[Models.Category] = []
+
 
