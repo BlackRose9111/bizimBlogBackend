@@ -171,10 +171,10 @@ class Category(Model):
     @staticmethod
     async def get_all():
         dbinstance = DbConnection.get_instance()
-        categories = dbinstance.fetch("SELECT * FROM category WHERE 1")
-        if categories == None:
+        _categories = dbinstance.fetch("SELECT * FROM category WHERE 1")
+        if _categories == None:
             return None
-        return [category(**category) for category in categories]
+        return [Category(**category) for category in _categories]
 
     @staticmethod
     async def find_where(**kwargs):
