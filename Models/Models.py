@@ -412,4 +412,10 @@ class blogCategory(Model):
         blogCategories = dbInstance.fetch("SELECT categoryId FROM blogCategory WHERE blogid=%s", (blog.id,))
         #only return the category objects in a list
         return [Category.get(category["categoryId"]) for category in blogCategories]
+    @staticmethod
+    def get_all_blogs_of_a_category(categoryId: int):
+        dbInstance = DbConnection.get_instance()
+        blogCategories = dbInstance.fetch("SELECT blogid FROM blogCategory WHERE categoryId=%s", (categoryId,))
+        #only return the blog objects in a list
+        return [Blog.get(blog["blogid"]) for blog in blogCategories]
 

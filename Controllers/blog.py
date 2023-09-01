@@ -41,7 +41,10 @@ async def get_from_search(search:str,start:int = None,limit:int = None):
     for blog in blogs:
         blogDTO = BlogWithCategoriesDTO(blog=blog,categories=[])
         blogDTOs.append(blogDTO)
-    
+    for blogDTO in blogDTOs:
+        #we will get the categories of each blog with the specially made method
+        categoriesOfThisBlog = blogCategory.get_all_categories_of_a_blog(blogDTO.blog)
+        blogDTO.categories = categoriesOfThisBlog
     if blogs == None:
         raise HTTPException(status_code=404, detail="Blog not found")
     return {"message":f"Blogs found","blogs":[blog for blog in blogDTOs]}
@@ -53,6 +56,8 @@ async def get_blog(id:int):
     from Models.Models import Blog
     from Models.DTO import DTO
     blog = Blog.get(id)
+    blogDTO = BlogWithCategoriesDTO(blog=blog,categories=[])
+    blogDTO.categories = blogCategory.get_all_categories_of_a_blog(blog)
     if blog == None:
         raise HTTPException(status_code=404, detail="Blog not found")
 
@@ -66,11 +71,21 @@ async def get_blogs_by_author(author_id:int):
 @router.get("/category/{id}")
 async def get_blogs_by_category(id:int):
     from Models.Models import Blog
-    blogs = await Blog.find_where(category_id=id)
+    from Models.DTO import BlogWithCategoriesDTO
+    #blogs have many to many relationship with categories, so we will have to use blogCategory table to get the blogs
+    blogs = blogCategory.get_all_blogs_of_a_category(id)
     for blog in blogs:
-        blog.category = await Category.find_where(id=blog.category_id)
         blog.user = await User.find_where(id=blog.user_id)
         blog.user.password = None
+    #convert them to blogDTOs and find their categories
+    blogDTOs = []
+    for blog in blogs:
+        blogDTO = BlogWithCategoriesDTO(blog=blog,categories=[])
+        blogDTOs.append(blogDTO)
+    for blogDTO in blogDTOs:
+        #we will get the categories of each blog with the specially made method
+        categoriesOfThisBlog = blogCategory.get_all_categories_of_a_blog(blogDTO.blog)
+        blogDTO.categories = categoriesOfThisBlog
     if blogs == None:
         raise HTTPException(status_code=404, detail="Blog not found")
     return {"message":f"Blogs found","blogs":[blog for blog in blogs]}
