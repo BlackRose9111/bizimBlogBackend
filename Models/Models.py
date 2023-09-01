@@ -166,15 +166,15 @@ class Category(Model):
             return None
         if categorydict == None:
             return None
-        return Category(id=categorydict["id"], name=categorydict["name"])
+        return Category(**categorydict)
 
     @staticmethod
     async def get_all():
         dbinstance = DbConnection.get_instance()
-        _categories = dbinstance.fetch("SELECT * FROM category WHERE 1")
-        if _categories == None:
+        categories = dbinstance.fetch("SELECT * FROM category WHERE 1")
+        if categories == None:
             return None
-        return [Category(**category) for category in _categories]
+        return [category(**category) for category in categories]
 
     @staticmethod
     async def find_where(**kwargs):
