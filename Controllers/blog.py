@@ -36,10 +36,15 @@ async def get_all_blogs(start:int = None,limit:int = None):
 async def get_from_search(search:str,start:int = None,limit:int = None):
     from Models.Models import Blog
     blogs = await Blog.search(search,start,limit)
+    #convert them to blogDTOs and find their categories
+    blogDTOs = []
+    for blog in blogs:
+        blogDTO = BlogWithCategoriesDTO(blog=blog,categories=[])
+        blogDTOs.append(blogDTO)
     
     if blogs == None:
         raise HTTPException(status_code=404, detail="Blog not found")
-    return {"message":f"Blogs found","blogs":[blog for blog in blogs]}
+    return {"message":f"Blogs found","blogs":[blog for blog in blogDTOs]}
 
 
 
