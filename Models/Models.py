@@ -166,7 +166,7 @@ class Category(Model):
             return None
         if categorydict == None:
             return None
-        return Category(**categorydict)
+        return Category(id=categorydict["id"], name=categorydict["name"])
 
     @staticmethod
     async def get_all():

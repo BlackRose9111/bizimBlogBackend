@@ -12,11 +12,11 @@ async def get_all_categories():
 @router.get("/{id}")
 async def get_category(id:int):
     from Models.Models import Category
-    category = Category.get(id)
-    if category == None:
+    _category = Category.get(id)
+    if _category == None:
         raise HTTPException(status_code=404, detail="Category not found")
 
-    return {"message":"Category found","category":category}
+    return {"message":"Category found","category":_category}
 
 @router.post("/")
 async def create_category(categorydto : CreateCategoryDTO,token : str = Header(default=None,description="Authorization token")):
