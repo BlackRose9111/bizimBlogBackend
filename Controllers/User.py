@@ -15,13 +15,13 @@ async def test():
 async def get_user(request : Request):
     token = request.headers.get("authorization")
 
-    from Models.DTO import DTO
+    from Models.DTO import DTO, UserInfoDTO
     from Authorization.Authorization import Authorization
     user = Authorization.get_instance().get_user(token)
     if user == None:
         raise HTTPException(status_code=404, detail="User not found")
 
-    userdto = Models.DTO.UserInfoDTO(id=user.id,name=user.name,surname=user.surname,email=user.email,superadmin=user.superadmin)
+    userdto = UserInfoDTO(id=user.id,name=user.name,surname=user.surname,email=user.email,superadmin=user.superadmin)
     print(userdto)
     return {"message":"User found","user":userdto}
 
